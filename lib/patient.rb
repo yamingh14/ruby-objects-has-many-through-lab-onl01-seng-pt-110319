@@ -1,24 +1,21 @@
-class Patient
-
-  attr_reader :name, :appointment, :doctor
-
-  def initialize(name)
-    @name = name
-  end
-
-  def new_appointment(doctor, date)
-    Appointment.new(self, doctor, date)
-  end
-
-  def appointments
-    Appointment.all.select do |appointment|
-      appointment.patient == self
+require 'pry'
+class Patient 
+    attr_reader :name
+    @@all = []
+    def initialize(name)
+        @name = name 
+        @@all << self
     end
-  end
-
-  def doctors
-    Appointment.all.map do |appointment|
-      appointment.doctor
+    def self.all 
+        @@all 
     end
-  end
+    def appointments
+        Appointment.all.select {|a| a.patient == self}
+    end
+    def new_appointment(doctor, date)
+        Appointment.new(date, self, doctor)
+    end
+    def doctors
+        appointments.map {|a| a.doctor}
+    end
 end
